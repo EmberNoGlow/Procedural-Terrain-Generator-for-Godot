@@ -1,0 +1,87 @@
+[gd_scene load_steps=12 format=3 uid="uid://523bfoduv382"]
+
+[ext_resource type="Material" uid="uid://bqmo3a1qborlv" path="res://assets/textures/Terrain/Terrain.tres" id="1_7g83o"]
+[ext_resource type="Script" uid="uid://cw2ymw46rjc68" path="res://scripts/terrain_generation/terrain_generator.gd" id="1_kqs1s"]
+[ext_resource type="PackedScene" uid="uid://dxvepvor2fvub" path="res://scenes/player.tscn" id="2_32lhk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_io8um"]
+sky_top_color = Color(0.223529, 0.521569, 1, 1)
+sky_horizon_color = Color(0.568627, 0.847059, 1, 1)
+sky_curve = 0.395852
+ground_horizon_color = Color(0.568627, 0.847059, 1, 1)
+ground_curve = 0.0336359
+
+[sub_resource type="Sky" id="Sky_kqs1s"]
+sky_material = SubResource("ProceduralSkyMaterial_io8um")
+
+[sub_resource type="Environment" id="Environment_io8um"]
+background_mode = 2
+sky = SubResource("Sky_kqs1s")
+ambient_light_sky_contribution = 0.2
+tonemap_mode = 3
+tonemap_exposure = 0.55
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.369149, 0.565326, 0.776129, 1)
+fog_density = 0.607
+fog_sky_affect = 0.085
+fog_depth_begin = 30.0
+fog_depth_end = 70.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_32lhk"]
+subdivide_width = 128
+subdivide_depth = 128
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7g83o"]
+noise_type = 2
+fractal_octaves = 10
+fractal_lacunarity = 2.225
+fractal_gain = 0.675
+fractal_weighted_strength = 0.45
+cellular_distance_function = 1
+cellular_return_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_d1c63"]
+width = 1024
+height = 1024
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_7g83o")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0uv0p"]
+transparency = 1
+albedo_color = Color(0.447059, 0.478431, 0.521569, 0.898039)
+metallic = 1.0
+roughness = 0.05
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_d1c63")
+uv1_scale = Vector3(5, 5, 5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0uv0p"]
+size = Vector2(128, 128)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_io8um")
+
+[node name="TerrainGenerator" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_7g83o")
+mesh = SubResource("PlaneMesh_32lhk")
+script = ExtResource("1_kqs1s")
+heightmap_path = "res://assets/heightmaps/Terrain004_2K.exr"
+height_scale = 40.0
+mesh_size = Vector2(128, 128)
+metadata/_custom_type_script = "uid://cw2ymw46rjc68"
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_32lhk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.6858, 37.7035)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+material_override = SubResource("StandardMaterial3D_0uv0p")
+mesh = SubResource("PlaneMesh_0uv0p")

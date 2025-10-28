@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://ddcwn4p22m3da"]
+
+[ext_resource type="Texture2D" uid="uid://brydw61cffm63" path="res://assets/textures/grass01.jpg" id="1_23nme"]
+[ext_resource type="Texture2D" uid="uid://blivc61mgjd3u" path="res://assets/textures/grass01_h.jpg" id="2_hpvcj"]
+[ext_resource type="Texture2D" uid="uid://cxtbjjgud2x1h" path="res://assets/textures/grass01_s.jpg" id="2_hsqq3"]
+[ext_resource type="Texture2D" uid="uid://bqbu3jl2w4y4t" path="res://assets/textures/grass01_n.jpg" id="3_hpvcj"]
+
+[resource]
+albedo_texture = ExtResource("1_23nme")
+metallic = 1.0
+metallic_texture = ExtResource("2_hsqq3")
+normal_enabled = true
+normal_scale = 6.45
+normal_texture = ExtResource("3_hpvcj")
+heightmap_enabled = true
+heightmap_texture = ExtResource("2_hpvcj")
+uv1_scale = Vector3(20, 20, 20)

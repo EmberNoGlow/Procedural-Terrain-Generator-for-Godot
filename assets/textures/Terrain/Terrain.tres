@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://bqmo3a1qborlv"]
+
+[ext_resource type="Shader" uid="uid://dbkxbtl4pkgcb" path="res://assets/textures/Terrain/Terrain.gdshader" id="1_d6owc"]
+[ext_resource type="Texture2D" uid="uid://xxgpdjqj4am6" path="res://assets/textures/Terrain/Terrain004_4K_Color.jpg" id="2_p8uvq"]
+[ext_resource type="Texture2D" uid="uid://ns8f77up0j4a" path="res://assets/textures/Terrain/Terrain004_4K_Details.jpg" id="3_84qe3"]
+[ext_resource type="Texture2D" uid="uid://bv7qm582khyu5" path="res://assets/textures/grass02.jpg" id="4_nu4lp"]
+[ext_resource type="Texture2D" uid="uid://brjjuw8nsbmfy" path="res://assets/textures/Terrain/Terrain004_4K_Soil.jpg" id="5_hxtmy"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_d6owc")
+shader_parameter/grass_tex = ExtResource("4_nu4lp")
+shader_parameter/color = ExtResource("2_p8uvq")
+shader_parameter/details = ExtResource("3_84qe3")
+shader_parameter/soil = ExtResource("5_hxtmy")
