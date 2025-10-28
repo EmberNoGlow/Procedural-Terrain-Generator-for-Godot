@@ -2,7 +2,7 @@
 Procedural terrain generation for Godot 4 based on MeshInstance3D and a height map.
 
 # Usage
-Just attach the terrain_generator.gd on MeshInstance3D and set heightmap path - select your image file (png, jpg, e.t.c) and copy path.
+Just attach the terrain_generator.gd on MeshInstance3D and set heightmap path - select your image file (png, jpg, e.t.c) in file system and copy path. Also set the mesh in MeshInstance3D as plane mesh and set subdivides.
 
 Tested on Godot 4.4.
 It’s public domain, so use it however you want!
