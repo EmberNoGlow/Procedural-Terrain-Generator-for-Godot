@@ -1,9 +1,13 @@
+@tool
 extends MeshInstance3D
 class_name TerrainGenerator
 
+@export_tool_button("Generate Landscape", "WorldEnvironment") var generate = _generate_terrain
+@export var save_mesh_path = "res://TerrainData/Terrain.res"
 
 ## Terrain Generation Settings
-@export var heightmap_path: String
+@export var subdivides : int = 50
+@export var heightmap: Texture2D
 @export var height_scale: float = 5.0  # Maximum vertical exaggeration of the terrain
 @export var mesh_size: Vector2 = Vector2(100.0, 100.0) # Size of the base plane in world units (X and Z)
 
@@ -12,22 +16,22 @@ var image_data: Image = Image.new()
 
 
 func _ready():
-	# Ensure generation runs after basic setup (though deferred call is commented out, 
-	# direct call is often fine for editor tools or simple setup)
-	# call_deferred("_generate_terrain")
-	_generate_terrain()
+	if not Engine.is_editor_hint():
+		# Ensure generation runs after basic setup (though deferred call is commented out, 
+		# direct call is often fine for editor tools or simple setup)
+		# call_deferred("_generate_terrain")
+		_generate_terrain()
 
 func _generate_terrain():
 	# 1. Load the heightmap texture
 	if not load_heightmap():
 		return
 
-	# 2. Configure the PlaneMesh resource
-	if not mesh is PlaneMesh:
-		push_error("MeshInstance3D must use a PlaneMesh component.")
-		return
+	var plane = PlaneMesh.new()
+	plane.subdivide_depth = subdivides
+	plane.subdivide_width = subdivides
 
-	var plane_mesh: PlaneMesh = mesh as PlaneMesh
+	var plane_mesh = plane
 
 	# Set the plane dimensions based on the specified world size and heightmap aspect ratio
 	var img_size = image_data.get_size()
@@ -47,7 +51,7 @@ func _generate_terrain():
 
 ## Step 1: Load the heightmap texture file
 func load_heightmap() -> bool:
-	var err = image_data.load(heightmap_path)
+	image_data = heightmap.get_image()
 	
 	# Convert the image to a readable format (e.g., RGB8)
 	image_data.convert(Image.FORMAT_RGB8) # Or another format if necessary for pixel reading
@@ -116,8 +120,28 @@ func generate_terrain_from_heightmap(plane_mesh: PlaneMesh):
 
 	# Assign the newly generated mesh to the MeshInstance3D node
 	self.mesh = final_mesh
-	
-	# Automatically create a collision shape based on the new geometry
-	create_trimesh_collision()
 
 	print("Terrain generation complete.")
+	if Engine.is_editor_hint():
+		await get_tree().create_timer(0.5).timeout
+		save_data()
+	else:
+		# Automatically create a collision shape based on the new geometry
+		create_trimesh_collision()
+
+
+func save_data():
+	# Убедимся, что папка существует
+	var folder = save_mesh_path.replace(save_mesh_path.get_file(), "")
+	var dir = DirAccess.open(folder)
+	if dir == null:
+		DirAccess.make_dir_absolute(folder)
+		dir = DirAccess.open(folder)
+	
+	# Сохраняем ресурс Mesh
+	var error = ResourceSaver.save(mesh, save_mesh_path)
+	
+	if error == OK:
+		print("Mesh successfully saved to: ", save_mesh_path)
+	else:
+		printerr("Error saving Mesh: ", error)
