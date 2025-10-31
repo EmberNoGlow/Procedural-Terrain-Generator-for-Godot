@@ -131,14 +131,12 @@ func generate_terrain_from_heightmap(plane_mesh: PlaneMesh):
 
 
 func save_data():
-	# Убедимся, что папка существует
 	var folder = save_mesh_path.replace(save_mesh_path.get_file(), "")
 	var dir = DirAccess.open(folder)
 	if dir == null:
 		DirAccess.make_dir_absolute(folder)
 		dir = DirAccess.open(folder)
 	
-	# Сохраняем ресурс Mesh
 	var error = ResourceSaver.save(mesh, save_mesh_path)
 	
 	if error == OK:
