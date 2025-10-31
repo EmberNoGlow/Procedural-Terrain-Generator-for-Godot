@@ -1,5 +1,5 @@
 # Procedural Terrain Generator for Godot
-Procedural terrain generation for Godot 4 based on MeshInstance3D and a height map.
+Procedural terrain generation for Godot 4 based on MeshInstance3D and a height map. Generation is available both in the editor and during execution.
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px;">
     <img src="screenshots/LandscapeTitle.png" style="width: 100%; margin-bottom: 10px;">
